@@ -2,6 +2,7 @@
 import ctypes
 import time
 from tkinter import *
+from termcolor import colored
 import tkinter as tk
 import tkinter.messagebox as tkmsg
 import tkinter.font as font
@@ -11,6 +12,7 @@ import win32gui, win32con
 def message_box(type, message, title):
     try:
         root = Tk()
+        root.withdraw()
 
         # Yes/No/Cancel Box
         if(type=='Y/N/C'):
@@ -95,3 +97,9 @@ def top_console(console):
 
 def get_perf_time():
     return time.perf_counter()
+
+def bool_color(bool):
+    if(bool):
+        return 'green'
+    else:
+        return 'red'

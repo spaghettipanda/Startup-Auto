@@ -1,2 +1,3 @@
 wget
 pywin32
+termcolor
