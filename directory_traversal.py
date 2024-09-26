@@ -25,7 +25,7 @@ def create_folder(dir):
 def traverse_dir(dir):
     try:
         path = dir
-        print(colored(f'Opening {os.path.basename(dir)}...\n', 'white'))
+        print(colored(f'Opening {os.path.basename(dir)}...\n', 'light_red', attrs=["bold"]))
         l_files = os.listdir(path)
         for file in l_files:
             # Variable for full file path

@@ -28,7 +28,7 @@ try:
 
     print('\nStarting script...')    
     print('\n======================================')
-    print(colored('Use CTRL+C in the console window to cancel the script...', 'cyan'))
+    print(colored('Use CTRL+C in the console window to cancel the script...', 'black', 'on_light_grey'))
     print('======================================\n')
 
     # Apply based on settings
@@ -46,7 +46,7 @@ try:
         is_dashboards = message_box('Y/N', f'Do you have Dashboard shortcuts?', f'Dashboards')
         f.write(f'Dashboards={is_dashboards}\n')
 
-        is_SAP = message_box('Y/N', f'Do you have after-hours SAP shortcuts (Weekends + Nights)?', f'After-hours SAP')
+        is_SAP = message_box('Y/N', f'Do you have after-hours SAP shortcuts? (PAS ONLY)', f'TROC Apps SAP')
         f.write(f'SAP={is_SAP}\n')
 
         is_MOP = message_box('Y/N', f'Do you have L1 MOP shortcuts?', f'L1 MOP')
@@ -59,15 +59,15 @@ try:
         init = True
     
 
-    print(f'Configuration Settings Found...\n')
-    print(colored(f'Dashboard shortcuts:', 'white'), colored(f'{is_dashboards}', f'{bool_color(is_dashboards)}'))
-    print(colored(f'SAP shortcuts:', 'white'), colored(f'{is_SAP}', f'{bool_color(is_SAP)}'))
-    print(colored(f'MOP shortcuts:', 'white'), colored(f'{is_MOP}', f'{bool_color(is_MOP)}'))
-    print(colored(f'Monitor Configs:', 'white'), colored(f'{is_MonitorConfigs}', f'{bool_color(is_MonitorConfigs)}'))
+    print(colored(f'Configuration Settings Found...\n', 'green', attrs=["bold"]))
+    print(colored(f'Dashboard shortcuts', f'{bool_color(is_dashboards)}', attrs=["bold", "underline"]), ':', colored(f'{is_dashboards}', f'{bool_color(is_dashboards)}'))
+    print(colored(f'SAP shortcuts:', f'{bool_color(is_SAP)}', attrs=["bold", "underline"]), colored(f'{is_SAP}', f'{bool_color(is_SAP)}'))
+    print(colored(f'MOP shortcuts:', f'{bool_color(is_MOP)}', attrs=["bold", "underline"]), colored(f'{is_MOP}', f'{bool_color(is_MOP)}'))
+    print(colored(f'Monitor Configs:', f'{bool_color(is_MonitorConfigs)}', attrs=["bold", "underline"]), colored(f'{is_MonitorConfigs}', f'{bool_color(is_MonitorConfigs)}'))
     
-    print('\n======================================')
-    print(colored(f'REMINDER: \n\nTo change the script settings, edit the file directly or delete it at:\n', 'yellow'), colored(f'{cfg_dir}', 'light_yellow'))
-    print('======================================\n')
+    print(colored(f'\n======================================', 'light_yellow', attrs=["dark"]))
+    print(colored(f'\nREMINDER: \n\nTo change the script settings, edit the file directly or delete it at:\n', 'yellow'), colored(f'{cfg_dir}', 'light_yellow'))
+    print(colored(f'\n======================================\n', 'light_yellow', attrs=["dark"]))
 
     # Directory variabes
     shortcut_path = f'{home_directory}\\Documents\\StartupShortcuts'# Path shortcut folder
@@ -81,7 +81,7 @@ try:
     monitor_setup = True
 
     custom_config = 'CustomConfig.cfg'
-    default_config = 'DefaultConfig.cfg'
+    default_config = 'MultiMonitorTool.cfg'
 
     # Append path to folder directories
     main = f'{shortcut_path}\\{main}'
@@ -160,34 +160,35 @@ try:
 
     ## 5) Monitor Configuration
     if(is_MonitorConfigs):
-        print('\n======================================\nMONITOR CONFIGURATION\n')
-        # Check config files exists
-        if(not os.path.isfile(f'{monitor_configs}\\{custom_config}')):
-            monitor_setup = False
-            message_box('error', f"""Monitor config file is missing for {custom_config}... 
-                            \n\nPlease save a configuration file as {custom_config} through the Multi Monitor application
-                            \n\nSave the config file to {monitor_configs}""", f'Custom Monitor Configuration missing...')
-        if(not os.path.isfile(f'{monitor_configs}\\{default_config}')):
-            monitor_setup = False
-            message_box('error', f"""Monitor config file is missing for {default_config}... 
-                            \n\nPlease save a configuration file as {default_config} through the Multi Monitor application
-                            \n\nSave the config file to {monitor_configs}""", f'Default Monitor Configuration missing...')
-        
+        print(colored(f'\n======================================', 'light_blue', attrs=["dark"]))
+        print(colored(f'\nMONITOR CONFIGURATION\n', 'light_blue', attrs=["bold"]))
         # Configure monitor setup
         if(monitor_setup == True):
             custom = message_box('Y/N/C', 'Laptop?', f'Hello! {get_data(3)}')
             if(custom==True):           # Yes - Custom Monitor Config
-                print(colored('\nApplying Laptop Monitor Config...\n', 'light_green'))
-                monitor = execute_command(f'{multi_monitor_tool} /LoadConfig {monitor_configs}\\{custom_config}')
+                if(not os.path.isfile(f'{monitor_configs}\\{custom_config}')):
+                    message_box('error', f"""Monitor config file is missing for {custom_config}... 
+                                    \n\nPlease save a configuration file as {custom_config} through the Multi Monitor application
+                                    \n\nSave the config file to {monitor_configs}""", f'Custom Monitor Configuration missing...')
+                else:
+                    print(colored('\nApplying Laptop Monitor Config...\n', 'light_green'))
+                    monitor = execute_command(f'{multi_monitor_tool} /LoadConfig {monitor_configs}\\{custom_config}')
             elif(custom==False):        # No - Default Monitor Config
-                print(colored('\nApplying Default Monitor Config...\n', 'light_green'))
-                monitor = execute_command(f'{multi_monitor_tool} /LoadConfig {monitor_configs}\\{default_config}')
+                if(not os.path.isfile(f'{monitor_configs}\\{default_config}')):
+                    message_box('error', f"""Monitor config file is missing for default monitor configuration... 
+                                    \n\nPlease save a configuration file as {default_config} through the Multi Monitor application
+                                    \n\nSave the config file to {monitor_configs}""", f'Default Monitor Configuration missing...')
+                else:
+                    print(colored('\nApplying Default Monitor Config...\n', 'light_green'))
+                    monitor = execute_command(f'{multi_monitor_tool} /LoadConfig {monitor_configs}\\{default_config}')
             else:                       # Cancelled - Apply no config
                 print('\nKeeping current Monitor Config...\n') 
 
+    print(colored(f'\n======================================\n', 'light_blue', attrs=["dark"]))
+
     # Script End
     print('Execution Finished')
-    input('Press any key to exit...')
+    input(colored('Press any key to exit...', 'cyan' , attrs=["reverse"]))
 
 # Exception catching
 except ValueError as err:
@@ -197,9 +198,9 @@ except ValueError as err:
 
 # CTRL + C Pressed (KeyboardInterrupt)
 except KeyboardInterrupt as err:
-    print('\n======================================\n')
-    print(f'CTRL+C pressed! Exiting...')
-    print('\n======================================\n')
+    print(colored(f'\n======================================', attrs=["reverse"]))
+    print(colored(f'CTRL+C pressed! Exiting...............', attrs=["reverse"]))
+    print(colored(f'======================================\n', attrs=["reverse"]))
     sys.exit()
 
 except Exception as err:

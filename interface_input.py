@@ -16,42 +16,35 @@ def message_box(type, message, title):
 
         # Yes/No/Cancel Box
         if(type=='Y/N/C'):
-            print(message)
             user_input = tkmsg.askyesnocancel(title, message)
-            if(user_input==True):
-                print(message + ': Yes')
-                return True
-            elif(user_input==False):
-                print(message + ': No')
-                return False
-            elif(user_input==None):
-                print(message + ': Cancel')
-                return None
+            if(user_input != None):
+                print(colored(f'{message}:', 'light_magenta'), colored(f'{user_input}', f'{bool_color(user_input)}'))
+                return user_input
             else:
-                raise ValueError('Unknown User Input! ', user_input)
-                
+                print(colored(f'{message}:', 'light_magenta'), colored(f'Cancel', 'light_yellow'))
+                return None
+
 
         # Yes/No Box  
         elif(type=='Y/N'):
             user_input = tkmsg.askyesno(title, message)
-            if(user_input==True):
-                print(message + ': Yes')
-                return True
-            elif(user_input==False):
-                print(message + ': No')
-                return False
+            user_input = tkmsg.askyesnocancel(title, message)
+            if(user_input != None):
+                print(colored(f'{message}:', 'light_magenta'), colored(f'{user_input}', f'{bool_color(user_input)}'))
+                return user_input
             else:
-                raise ValueError('Unknown User Input! ', user_input)
+                print(colored(f'{message}:', 'light_magenta'), colored(f'{user_input}', 'light_yellow'))
+                return None
         
 
         # OK/Cancel Box  
         elif(type=='O/C'):
             user_input = tkmsg.askokcancel(title, message)
             if(user_input==True):
-                print(message + ': OK')
+                print(colored(f'{message}:', 'light_magenta'), colored(f'OK', 'light_green'))
                 return True
             elif(user_input==False):
-                print(message + ': Cancel')
+                print(colored(f'{message}:', 'light_magenta'), colored(f'Cancel', 'light_red'))
                 return None
             else:
                 raise ValueError('Unknown User Input! ', user_input)
@@ -60,18 +53,17 @@ def message_box(type, message, title):
         elif(type=='O'):
             user_input = tkmsg.showinfo(title, message)
             if(user_input=='ok'):
-                print(message + ': OK')
                 return True
             else:
                 raise ValueError('Unknown User Input! ', message + ': ' + user_input)
             
         elif(type=='warning'):
             tkmsg.showwarning(title, message)
-            print(f'\n[Warning Box] \n{message}\n')
+            print(colored(f'\n{message}\n', 'light_yellow', attrs=["bold", "reverse"]))
             
         elif(type=='error'):
             tkmsg.showerror(title, message)
-            print(f'\n[Error Box] \n{message}\n')
+            print(colored(f'\n{message}\n', 'red', attrs=["bold", "reverse"]))
             
         else:
             raise ValueError('Unknown MessageBox Type Selected: ', type)
