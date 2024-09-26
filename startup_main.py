@@ -1,7 +1,7 @@
 # Custom Modules
 from shift_calc import *
 from interface_input import *
-from directory_traversal import *
+from file_management import *
 
 # [REMINDER: User \\ doubleslash for subfolders]
 

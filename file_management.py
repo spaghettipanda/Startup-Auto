@@ -7,7 +7,7 @@ from termcolor import colored
 from interface_input import message_box
 
 def open_file(file_path):
-    #os.startfile(file_path) # Comment out if testing #
+    os.startfile(file_path) # Comment out if testing #
     print(colored(f'File:', 'blue'), colored(f'{os.path.basename(file_path)}', 'light_blue'))
 
 def check_file(file_path):
