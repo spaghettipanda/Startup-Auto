@@ -99,7 +99,7 @@ try:
             sap_message = f'\n-------------------------------------\nREMINDER: SAP PM02 Today!\n-------------------------------------\n'
             shift = f'{shift} {sap_message}' 
     
-    ## 1) Check if L1_MOP occurring on second shift of swing (Tuesday/Thursday/Saturday Day Shifts)
+    ## 2) Check if L1_MOP occurring on second shift of swing (Tuesday/Thursday/Saturday Day Shifts)
     if(is_MOP):
         if(day_or_night_shift == 'Day Shift'):
             if day_of_week in ('Tuesday', 'Thursday', 'Saturday'):
@@ -107,10 +107,6 @@ try:
                 # MOP Reminder
                 mop_message = f'\n----------------------------------\nREMINDER: L1 MOP Today!\n----------------------------------\n'
                 shift = f'{shift} {mop_message}'
-                
-                # Traverse MOP directory
-                traverse_dir(mop)
-                print('')
     
     # Check if Multi Monitor Tool exists Prompt tool download if not
     if(is_MonitorConfigs):
@@ -165,6 +161,15 @@ try:
 
     print(colored(f'\n======================================\n', 'light_blue', attrs=["dark"]))
 
+    ## 3) Check if L1_MOP occurring on second shift of swing (Tuesday/Thursday/Saturday Day Shifts)
+    if(is_MOP):
+        if(day_or_night_shift == 'Day Shift'):
+            if day_of_week in ('Tuesday', 'Thursday', 'Saturday'):
+                
+                # Traverse MOP directory
+                traverse_dir(mop)
+                print('')
+    
     ## 3) Traverse main directory and open shortcuts
     traverse_dir(main)
     print('')
@@ -176,6 +181,7 @@ try:
 
     ## 5) Traverse SAP directory and open shortcuts
     if(is_SAP):
+        if(day_or_night_shift == 'Night Shift') or (weekend_status == 'Weekend'):    
             traverse_dir(sap)
             print('')
 
