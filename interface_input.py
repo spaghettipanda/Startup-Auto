@@ -28,7 +28,6 @@ def message_box(type, message, title):
         # Yes/No Box  
         elif(type=='Y/N'):
             user_input = tkmsg.askyesno(title, message)
-            user_input = tkmsg.askyesnocancel(title, message)
             if(user_input != None):
                 print(colored(f'{message}:', 'light_magenta'), colored(f'{user_input}', f'{bool_color(user_input)}'))
                 return user_input

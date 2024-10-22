@@ -55,7 +55,6 @@ try:
 
         f.close()
         init = True
-    
 
     print(colored(f'Configuration Settings Found...\n', 'green', attrs=["bold"]))
     print(colored(f'Dashboard shortcuts', f'{bool_color(is_dashboards)}', attrs=["bold", "underline"]), ':', colored(f'{is_dashboards}', f'{bool_color(is_dashboards)}'))
