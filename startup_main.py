@@ -24,8 +24,6 @@ try:
     cfg_file_name = f'startup_config'
     cfg_dir = f'{home_directory}\\{cfg_file_name}'
     
-    init = False
-
     print('\nStarting script...')    
     print('\n======================================')
     print(colored('Use CTRL+C in the console window to cancel the script...', 'black', 'on_light_grey'))
@@ -93,28 +91,16 @@ try:
     ### MULTI MONITOR TOOL ###
     multi_monitor_tool = f'{monitor_configs}\\MultiMonitorTool.exe' # https://www.nirsoft.net/utils/multi_monitor_tool.html (https://www.nirsoft.net/utils/multimonitortool-x64.zip)
 
-    ## 1) Traverse main directory
-    traverse_dir(main)
-    print('')
 
-    ## 2) Traverse dashboards directory
-    if(is_dashboards):
-        traverse_dir(dashboards)
-        print('')
-
-    ## 3) SAP PM02 on night shifts and weekend shifts
+    ## 1) Check SAP PM02 on night shifts and weekend shifts
     if(is_SAP):
         if(day_or_night_shift == 'Night Shift') or (weekend_status == 'Weekend'):
             
             # SAP Reminder
             sap_message = f'\n-------------------------------------\nREMINDER: SAP PM02 Today!\n-------------------------------------\n'
             shift = f'{shift} {sap_message}' 
-            
-            # Traverse SAP directory
-            traverse_dir(sap)
-            print('')
-
-    ## 4) For L1_MOP occurring on second shift of swing (Tuesday/Thursday/Saturday Day Shifts)
+    
+    ## 1) Check if L1_MOP occurring on second shift of swing (Tuesday/Thursday/Saturday Day Shifts)
     if(is_MOP):
         if(day_or_night_shift == 'Day Shift'):
             if day_of_week in ('Tuesday', 'Thursday', 'Saturday'):
@@ -126,14 +112,8 @@ try:
                 # Traverse MOP directory
                 traverse_dir(mop)
                 print('')
-            else:
-                if(init):
-                    check_dir(mop)
-                    print('')
-                else:
-                    shift = shift + '----------'
     
-    # Prompt tool download if Multi Monitor Tool isn't found
+    # Check if Multi Monitor Tool exists Prompt tool download if not
     if(is_MonitorConfigs):
         if(not os.path.isfile(multi_monitor_tool)):
             zip = f'{monitor_configs}\\multimonitortool-x64.zip'
@@ -158,7 +138,7 @@ try:
     # Show shift details
     shift_details = message_box('O', shift, f'Hello! {get_data(3)}')
 
-    ## 5) Monitor Configuration
+    ## 2) Monitor Configuration
     if(is_MonitorConfigs):
         print(colored(f'\n======================================', 'light_blue', attrs=["dark"]))
         print(colored(f'\nMONITOR CONFIGURATION\n', 'light_blue', attrs=["bold"]))
@@ -185,6 +165,20 @@ try:
                 print('\nKeeping current Monitor Config...\n') 
 
     print(colored(f'\n======================================\n', 'light_blue', attrs=["dark"]))
+
+    ## 3) Traverse main directory and open shortcuts
+    traverse_dir(main)
+    print('')
+
+    ## 4) Traverse dashboards directory and open shortcuts
+    if(is_dashboards):
+        traverse_dir(dashboards)
+        print('')
+
+    ## 5) Traverse SAP directory and open shortcuts
+    if(is_SAP):
+            traverse_dir(sap)
+            print('')
 
     # Script End
     print('Execution Finished')
