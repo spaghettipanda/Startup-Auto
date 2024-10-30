@@ -20,7 +20,7 @@ def get_weekend_status(now):
 
 # Check if Day or Night Shift
 def get_day_or_night_shift(now):
-    if(now.hour <= 18 and now.hour >= 6):
+    if(now.hour < 18 and now.hour >= 6):
         return 'Day Shift'
     else:
 

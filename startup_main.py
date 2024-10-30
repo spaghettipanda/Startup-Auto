@@ -56,6 +56,7 @@ try:
         f.close()
         init = True
 
+    
     print(colored(f'Configuration Settings Found...\n', 'green', attrs=["bold"]))
     print(colored(f'Dashboard shortcuts', f'{bool_color(is_dashboards)}', attrs=["bold", "underline"]), ':', colored(f'{is_dashboards}', f'{bool_color(is_dashboards)}'))
     print(colored(f'SAP shortcuts:', f'{bool_color(is_SAP)}', attrs=["bold", "underline"]), colored(f'{is_SAP}', f'{bool_color(is_SAP)}'))
@@ -131,8 +132,9 @@ try:
             monitor_setup = False
 
     # Show shift details
+    print(colored(f'\n{shift}\n','red'))
     shift_details = message_box('O', shift, f'Hello! {get_data(3)}')
-
+    
     ## 2) Monitor Configuration
     if(is_MonitorConfigs):
         print(colored(f'\n======================================', 'light_blue', attrs=["dark"]))
@@ -169,7 +171,7 @@ try:
                 # Traverse MOP directory
                 traverse_dir(mop)
                 print('')
-    
+
     ## 3) Traverse main directory and open shortcuts
     traverse_dir(main)
     print('')
