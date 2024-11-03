@@ -59,23 +59,26 @@ def traverse_dir(dir):
         if(create_dir == True):
             create_folder(dir)
             print(f'\nCreating folder at {dir}...\n')
+            open_folder(dir)               
             create_dir = message_box('O', f"""Folder created..
             \n
             \nPlease place your {os.path.basename(dir)} here...\n\n({dir})""", f'\"{os.path.basename(dir)}\"')         
-            open_folder(dir)   
         elif(create_dir == False):
             message_box('error', f"""Please try again after creating a folder at: 
             \n\"{dir}\"
             \nor just re-run this script...
             \nClick OK or press enter to exit...""", f'\"{os.path.basename(dir)}\" folder not found!')
             print('\nEnding execution...')
+            input(colored('Press any key to exit...', 'cyan' , attrs=["reverse"]))
             sys.exit()
         else:
             print('\nEnding execution...')
+            input(colored('Press any key to exit...', 'cyan' , attrs=["reverse"]))
             sys.exit()
     
     except Exception as err:
         print(f'\nAn unexpected error occurred! \nType: {sys.exc_info()} \nError:{err.args}')
+        input(colored('Press any key to exit...', 'cyan' , attrs=["reverse"]))
         sys.exit()
 
 def check_dir(dir):
@@ -115,10 +118,10 @@ def check_dir(dir):
         if(create_dir == True):
             create_folder(dir)
             print(f'\nCreating folder at {dir}...\n')
+            open_folder(dir)
             create_dir = message_box('O', f"""Folder created..
             \n
             \nPlease place your {os.path.basename(dir)} here...\n\n({dir})""", f'\"{os.path.basename(dir)}\"')
-            open_folder(dir)
         elif(create_dir == False):
             message_box('error', f"""Please try again after creating a folder at: 
             \n\"{dir}\"

@@ -141,14 +141,14 @@ try:
         print(colored(f'\nMONITOR CONFIGURATION\n', 'light_blue', attrs=["bold"]))
         # Configure monitor setup
         if(monitor_setup == True):
-            custom = message_box('Y/N/C', 'Laptop?', f'Hello! {get_data(3)}')
+            custom = message_box('Y/N/C', 'Custom Config?', f'Hello! {get_data(3)}')
             if(custom==True):           # Yes - Custom Monitor Config
                 if(not os.path.isfile(f'{monitor_configs}\\{custom_config}')):
                     message_box('error', f"""Monitor config file is missing for {custom_config}... 
                                     \n\nPlease save a configuration file as {custom_config} through the Multi Monitor application
                                     \n\nSave the config file to {monitor_configs}""", f'Custom Monitor Configuration missing...')
                 else:
-                    print(colored('\nApplying Laptop Monitor Config...\n', 'light_green'))
+                    print(colored('\nApplying Custom Monitor Config...\n', 'light_green'))
                     monitor = execute_command(f'{multi_monitor_tool} /LoadConfig {monitor_configs}\\{custom_config}')
             elif(custom==False):        # No - Default Monitor Config
                 if(not os.path.isfile(f'{monitor_configs}\\{default_config}')):
