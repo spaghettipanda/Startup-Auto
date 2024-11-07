@@ -35,6 +35,7 @@ try:
         is_SAP = str_to_bool(config_scan(cfg_dir, 'SAP'))
         is_MOP = str_to_bool(config_scan(cfg_dir, 'MOP'))
         is_MonitorConfigs = str_to_bool(config_scan(cfg_dir, 'MonitorConfigs'))
+        is_ExtraCustomConfig = str_to_bool(config_scan(cfg_dir, 'ExtraCustomConfig'))
     else:
         message_box('O', f'A config file was not found...\n\nCreating one at {home_directory}', f'First Time?')
         print(f'Config does not exist\nCreating...')
@@ -53,6 +54,8 @@ try:
         is_MonitorConfigs = message_box('Y/N', f'Do you want monitor configuration automation?', f'Monitor Configuration')
         f.write(f'MonitorConfigs={is_MonitorConfigs}\n')
 
+        f.write(f'ExtraCustomConfig={False}\n')
+
         f.close()
         init = True
 
@@ -62,6 +65,8 @@ try:
     print(colored(f'SAP shortcuts:', f'{bool_color(is_SAP)}', attrs=["bold", "underline"]), colored(f'{is_SAP}', f'{bool_color(is_SAP)}'))
     print(colored(f'MOP shortcuts:', f'{bool_color(is_MOP)}', attrs=["bold", "underline"]), colored(f'{is_MOP}', f'{bool_color(is_MOP)}'))
     print(colored(f'Monitor Configs:', f'{bool_color(is_MonitorConfigs)}', attrs=["bold", "underline"]), colored(f'{is_MonitorConfigs}', f'{bool_color(is_MonitorConfigs)}'))
+    if(is_ExtraCustomConfig):
+        print(colored(f'Extra Custom Config:', f'{bool_color(is_ExtraCustomConfig)}', attrs=["bold", "underline"]), colored(f'{is_ExtraCustomConfig}', f'{bool_color(is_ExtraCustomConfig)}'))
     
     print(colored(f'\n======================================', 'light_yellow', attrs=["dark"]))
     print(colored(f'\nREMINDER: \n\nTo change the script settings, edit the file directly or delete it at:\n', 'yellow'), colored(f'{cfg_dir}', 'light_yellow'))
@@ -76,6 +81,7 @@ try:
     mop = 'L1_MOP Shortcuts'                        # MOP shortcuts
 
     monitor_configs = 'MonitorConfigs'  # Monitor configurations folder (Requires Multi Monitor Tool - See ### Below)
+    extra_custom_config = 'ExtraCustomConfig' # Hidden - Extra Config file if needed
     monitor_setup = True
 
     custom_config = 'CustomConfig.cfg'
@@ -136,7 +142,7 @@ try:
     shift_details = message_box('O', shift, f'Hello! {get_data(3)}')
     
     ## 2) Monitor Configuration
-    if(is_MonitorConfigs):
+    if(is_ExtraCustomConfig):
         print(colored(f'\n======================================', 'light_blue', attrs=["dark"]))
         print(colored(f'\nMONITOR CONFIGURATION\n', 'light_blue', attrs=["bold"]))
         # Configure monitor setup
@@ -160,6 +166,16 @@ try:
                     monitor = execute_command(f'{multi_monitor_tool} /LoadConfig {monitor_configs}\\{default_config}')
             else:                       # Cancelled - Apply no config
                 print('\nKeeping current Monitor Config...\n') 
+    else:
+        if(is_MonitorConfigs):
+            if(not os.path.isfile(f'{monitor_configs}\\{default_config}')):
+                message_box('error', f"""Monitor config file is missing for default monitor configuration... 
+                                \n\nPlease save a configuration file as {default_config} through the Multi Monitor application
+                                \n\nSave the config file to {monitor_configs}""", f'Default Monitor Configuration missing...')
+            else:
+                print(colored('\nApplying Default Monitor Config...\n', 'light_green'))
+                monitor = execute_command(f'{multi_monitor_tool} /LoadConfig {monitor_configs}\\{default_config}')
+            
 
     print(colored(f'\n======================================\n', 'light_blue', attrs=["dark"]))
 
@@ -202,6 +218,12 @@ except KeyboardInterrupt as err:
     print(colored(f'\n======================================', attrs=["reverse"]))
     print(colored(f'CTRL+C pressed! Exiting...............', attrs=["reverse"]))
     print(colored(f'======================================\n', attrs=["reverse"]))
+    sys.exit()
+
+except AttributeError as err:
+    print(f'\ntype: {sys.exc_info()} \nerror:{err}')
+    print(f'args: {err.args}')
+    print(f'\nIf you see this, it may be an issue with your startup_config file. Please delete it and try again... \n\nConfig Location: {cfg_dir}')
     sys.exit()
 
 except Exception as err:
