@@ -14,3 +14,7 @@ Folders are created/used for each Setting/Feature, and can be divided into 5 opt
 If the required folders are not present, the user will be prompted to create them, if the settings have been enabled
 
 The script will automatically set itself up with a configuration file if it is not present in the home directory (i.e. Initial Run)
+
+Further documentation has been added:
+- startup_script_HLD.pdf
+- startup_script_QRG.pdf
