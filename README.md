@@ -16,5 +16,5 @@ If the required folders are not present, the user will be prompted to create the
 The script will automatically set itself up with a configuration file if it is not present in the home directory (i.e. Initial Run)
 
 Further documentation has been added:
-- startup_script_HLD.pdf
-- startup_script_QRG.pdf
+- [startup_script_HLD.pdf](https://github.com/spaghettipanda/Startup-Auto/blob/main/startup_script_HLD.pdf)
+- [startup_script_QRG.pdf](https://github.com/spaghettipanda/Startup-Auto/blob/main/startup_script_QRG.pdf)
