@@ -29,13 +29,20 @@ try:
     print(colored('Use CTRL+C in the console window to cancel the script...', 'black', 'on_light_grey'))
     print('======================================\n')
 
+    init = False
+
     # Apply based on settings
     if(file_exists(cfg_dir)):
         is_dashboards = str_to_bool(config_scan(cfg_dir, 'Dashboards'))
+        print(is_dashboards)
         is_SAP = str_to_bool(config_scan(cfg_dir, 'SAP'))
+        print(is_SAP)
         is_MOP = str_to_bool(config_scan(cfg_dir, 'MOP'))
-        is_MonitorConfigs = str_to_bool(config_scan(cfg_dir, 'MonitorConfigs'))
+        print(is_MOP)
+        is_MonitorConfig = str_to_bool(config_scan(cfg_dir, 'MonitorConfig'))
+        print(is_MonitorConfig)
         is_ExtraCustomConfig = str_to_bool(config_scan(cfg_dir, 'ExtraCustomConfig'))
+        print(is_ExtraCustomConfig)
     else:
         message_box('O', f'A config file was not found...\n\nCreating one at {home_directory}', f'First Time?')
         print(f'Config does not exist\nCreating...')
@@ -51,9 +58,10 @@ try:
         is_MOP = message_box('Y/N', f'Do you have L1 MOP shortcuts?', f'L1 MOP')
         f.write(f'MOP={is_MOP}\n')
 
-        is_MonitorConfigs = message_box('Y/N', f'Do you want monitor configuration automation?', f'Monitor Configuration')
-        f.write(f'MonitorConfigs={is_MonitorConfigs}\n')
-
+        is_MonitorConfig = message_box('Y/N', f'Do you want monitor configuration automation?\n\nNOTE: Requires MultiMonitorTool.exe; will be downloaded automatically if you select Yes.\n\nAlso requires some set-up (i.e. saving your current monitor configuration)\n\nSee QRG for more info...', f'Monitor Configuration')
+        f.write(f'MonitorConfig={is_MonitorConfig}\n')
+        
+        is_ExtraCustomConfig = False
         f.write(f'ExtraCustomConfig={False}\n')
 
         f.close()
@@ -64,7 +72,7 @@ try:
     print(colored(f'Dashboard shortcuts', f'{bool_color(is_dashboards)}', attrs=["bold", "underline"]), ':', colored(f'{is_dashboards}', f'{bool_color(is_dashboards)}'))
     print(colored(f'SAP shortcuts:', f'{bool_color(is_SAP)}', attrs=["bold", "underline"]), colored(f'{is_SAP}', f'{bool_color(is_SAP)}'))
     print(colored(f'MOP shortcuts:', f'{bool_color(is_MOP)}', attrs=["bold", "underline"]), colored(f'{is_MOP}', f'{bool_color(is_MOP)}'))
-    print(colored(f'Monitor Configs:', f'{bool_color(is_MonitorConfigs)}', attrs=["bold", "underline"]), colored(f'{is_MonitorConfigs}', f'{bool_color(is_MonitorConfigs)}'))
+    print(colored(f'Monitor Configs:', f'{bool_color(is_MonitorConfig)}', attrs=["bold", "underline"]), colored(f'{is_MonitorConfig}', f'{bool_color(is_MonitorConfig)}'))
     if(is_ExtraCustomConfig):
         print(colored(f'Extra Custom Config:', f'{bool_color(is_ExtraCustomConfig)}', attrs=["bold", "underline"]), colored(f'{is_ExtraCustomConfig}', f'{bool_color(is_ExtraCustomConfig)}'))
     
@@ -80,7 +88,7 @@ try:
     sap = 'SAP Shortcuts'                           # SAP shortcut folder
     mop = 'L1_MOP Shortcuts'                        # MOP shortcuts
 
-    monitor_configs = 'MonitorConfigs'  # Monitor configurations folder (Requires Multi Monitor Tool - See ### Below)
+    monitor_configs = 'MonitorConfig'  # Monitor configurations folder (Requires Multi Monitor Tool - See ### Below)
     extra_custom_config = 'ExtraCustomConfig' # Hidden - Extra Config file if needed
     monitor_setup = True
 
@@ -116,22 +124,18 @@ try:
                 shift = f'{shift} {mop_message}'
     
     # Check if Multi Monitor Tool exists Prompt tool download if not
-    if(is_MonitorConfigs):
+    if(is_MonitorConfig):
         if(not os.path.isfile(multi_monitor_tool)):
             zip = f'{monitor_configs}\\multimonitortool-x64.zip'
             if(os.path.isfile(zip)):
                 extract_zip(zip, monitor_configs, 'MultiMonitorTool.exe')
                 remove_file(zip)
             else:
-                download = message_box('Y/N', f'MultiMonitorTool.exe was not found at: \n\n{monitor_configs} \n\nDownload?', f'Missing Multi Monitor Tool...')
-                if(download):
-                    create_folder(monitor_configs)
-                    download_to_dir('https://www.nirsoft.net/utils/multimonitortool-x64.zip', monitor_configs)
-                    extract_zip(zip, monitor_configs, 'MultiMonitorTool.exe')
-                    remove_file(zip)
-                    
-                else:
-                    message_box('warning', f'MultiMonitorTool is needed to for monitor configuration...', f'Missing Multi Monitor Tool...')
+                print(f'Downloading MultiMonitorTool.exe to: \n\n{monitor_configs}\n')
+                create_folder(monitor_configs)
+                download_to_dir('https://www.nirsoft.net/utils/multimonitortool-x64.zip', monitor_configs)
+                extract_zip(zip, monitor_configs, 'MultiMonitorTool.exe')
+                remove_file(zip)
 
         # Check multi monitor exists before proceeding
         if(not os.path.isfile(multi_monitor_tool)):
@@ -152,7 +156,9 @@ try:
                 if(not os.path.isfile(f'{monitor_configs}\\{custom_config}')):
                     message_box('error', f"""Monitor config file is missing for {custom_config}... 
                                     \n\nPlease save a configuration file as {custom_config} through the Multi Monitor application
-                                    \n\nSave the config file to {monitor_configs}""", f'Custom Monitor Configuration missing...')
+                                    \n\nSave the config file to {monitor_configs}
+                                    \n\nSee QRG for more info...""", f'Custom Monitor Configuration missing...')
+                    monitor_setup = False
                 else:
                     print(colored('\nApplying Custom Monitor Config...\n', 'light_green'))
                     monitor = execute_command(f'{multi_monitor_tool} /LoadConfig {monitor_configs}\\{custom_config}')
@@ -160,14 +166,16 @@ try:
                 if(not os.path.isfile(f'{monitor_configs}\\{default_config}')):
                     message_box('error', f"""Monitor config file is missing for default monitor configuration... 
                                     \n\nPlease save a configuration file as {default_config} through the Multi Monitor application
-                                    \n\nSave the config file to {monitor_configs}""", f'Default Monitor Configuration missing...')
+                                    \n\nSave the config file to {monitor_configs}
+                                    \n\nSee QRG for more info...""", f'Default Monitor Configuration missing...')
+                    monitor_setup = False
                 else:
                     print(colored('\nApplying Default Monitor Config...\n', 'light_green'))
                     monitor = execute_command(f'{multi_monitor_tool} /LoadConfig {monitor_configs}\\{default_config}')
             else:                       # Cancelled - Apply no config
                 print('\nKeeping current Monitor Config...\n') 
     else:
-        if(is_MonitorConfigs):
+        if(is_MonitorConfig):
             if(not os.path.isfile(f'{monitor_configs}\\{default_config}')):
                 message_box('error', f"""Monitor config file is missing for default monitor configuration... 
                                 \n\nPlease save a configuration file as {default_config} through the Multi Monitor application
@@ -185,22 +193,22 @@ try:
             if day_of_week in ('Tuesday', 'Thursday', 'Saturday'):
                 
                 # Traverse MOP directory
-                traverse_dir(mop)
+                traverse_dir(mop, init)
                 print('')
 
     ## 3) Traverse main directory and open shortcuts
-    traverse_dir(main)
+    traverse_dir(main, init)
     print('')
 
     ## 4) Traverse dashboards directory and open shortcuts
     if(is_dashboards):
-        traverse_dir(dashboards)
+        traverse_dir(dashboards, init)
         print('')
 
     ## 5) Traverse SAP directory and open shortcuts
     if(is_SAP):
         if(day_or_night_shift == 'Night Shift') or (weekend_status == 'Weekend'):    
-            traverse_dir(sap)
+            traverse_dir(sap, init)
             print('')
 
     # Script End
@@ -223,6 +231,7 @@ except KeyboardInterrupt as err:
 except AttributeError as err:
     print(f'\ntype: {sys.exc_info()} \nerror:{err}')
     print(f'args: {err.args}')
+    print(f'Line {sys.exc_info().tb_lineno}')
     print(f'\nIf you see this, it may be an issue with your startup_config file. Please delete it and try again... \n\nConfig Location: {cfg_dir}')
     sys.exit()
 

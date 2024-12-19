@@ -1,3 +1,4 @@
 wget
 pywin32
 termcolor
+PyInstaller

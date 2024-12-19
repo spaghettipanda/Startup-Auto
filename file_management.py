@@ -22,7 +22,7 @@ def create_folder(dir):
 
 # Function for traversing directory
 # Requires directory as parameter
-def traverse_dir(dir):
+def traverse_dir(dir, init):
     try:
         path = dir
         print(colored(f'Opening {os.path.basename(dir)}...\n', 'light_red', attrs=["bold"]))
@@ -46,36 +46,26 @@ def traverse_dir(dir):
                 print(f'ALERT: {file} is not a file, so can not be printed!')
     
     except FileNotFoundError as err:
-        message_box('warning', f"""***************************************************************
-            \n{os.path.basename(dir)} could not be found! 
-            \n
-            \n\"{dir}\"
-            \n***************************************************************""", f'\"{os.path.basename(dir)}\" folder not found!')
-        
-        create_dir = message_box('Y/N', f"""Would you like a folder to be created for you?
-        \n
-        \n({dir})""", f'\"{os.path.basename(dir)}\" folder')
-        
-        if(create_dir == True):
+        if(init!=True):
+            message_box('warning', f"""***************************************************************
+                \n{os.path.basename(dir)} could not be found! 
+                \n
+                \n\"{dir}\"
+                \n
+                \nCreating {os.path.basename(dir)} folder...
+                \n
+                \n***************************************************************""", f'\"{os.path.basename(dir)}\" folder not found!')
+            
             create_folder(dir)
-            print(f'\nCreating folder at {dir}...\n')
             open_folder(dir)               
-            create_dir = message_box('O', f"""Folder created..
-            \n
-            \nPlease place your {os.path.basename(dir)} here...\n\n({dir})""", f'\"{os.path.basename(dir)}\"')         
-        elif(create_dir == False):
-            message_box('error', f"""Please try again after creating a folder at: 
-            \n\"{dir}\"
-            \nor just re-run this script...
-            \nClick OK or press enter to exit...""", f'\"{os.path.basename(dir)}\" folder not found!')
-            print('\nEnding execution...')
-            input(colored('Press any key to exit...', 'cyan' , attrs=["reverse"]))
-            sys.exit()
+            print(f'Please place your {os.path.basename(dir)} here...\n\n)')   
         else:
-            print('\nEnding execution...')
-            input(colored('Press any key to exit...', 'cyan' , attrs=["reverse"]))
-            sys.exit()
-    
+            print(f'Creating {os.path.basename(dir)} folder...')
+            create_folder(dir)
+            open_folder(dir)               
+            print(colored(f'Please place your {os.path.basename(dir)} here...\n\n)', 'green', attrs=["reverse"]))   
+
+
     except Exception as err:
         print(f'\nAn unexpected error occurred! \nType: {sys.exc_info()} \nError:{err.args}')
         input(colored('Press any key to exit...', 'cyan' , attrs=["reverse"]))
