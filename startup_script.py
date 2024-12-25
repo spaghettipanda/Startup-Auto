@@ -30,6 +30,7 @@ try:
     print('======================================\n')
 
     init = False
+    print(f'Path: {sys.path}')
 
     # Apply based on settings
     if(file_exists(cfg_dir)):
@@ -131,8 +132,9 @@ try:
                 extract_zip(zip, monitor_configs, 'MultiMonitorTool.exe')
                 remove_file(zip)
             else:
-                print(f'Downloading MultiMonitorTool.exe to: \n\n{monitor_configs}\n')
+                print(f'Downloading MultiMonitorTool.exe to: {monitor_configs}\n')
                 create_folder(monitor_configs)
+                print(f'If the script is stuck on this step, try cancelling (CTRL+C) and re-running the script manually to install the tool first.\n')
                 download_to_dir('https://www.nirsoft.net/utils/multimonitortool-x64.zip', monitor_configs)
                 extract_zip(zip, monitor_configs, 'MultiMonitorTool.exe')
                 remove_file(zip)
