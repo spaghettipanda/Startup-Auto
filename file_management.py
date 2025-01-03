@@ -40,8 +40,8 @@ def traverse_dir(dir, init):
                     print(f'ALERT: {file} could not be printed! Please check the associated softwares, or the file type.')
             elif(os.path.isdir(file_path)):
                  print('\n--------------------------------------')
-                 print(f'Folder \"{file}\" found! Entering folder...\n')
-                 traverse_dir(f'{dir}\\{file}')
+                 print(f'Folder \"{file}\" found! Opening folder...\n')
+                 open_folder(f'{dir}\\{file}')
             else:
                 print(f'ALERT: {file} is not a file, so can not be printed!')
     
@@ -210,4 +210,5 @@ def config_scan(dir, setting):
                     return result[1]
                 
 def str_to_bool(str):
-    return str.lower() in ('y', 'yes', 't', 'true')
+    to_string = f'{str}'
+    return to_string.lower() in ('y', 'yes', 't', 'true')

@@ -216,6 +216,7 @@ try:
     # Script End
     print('Execution Finished')
     input(colored('Press any key to exit...', 'cyan' , attrs=["reverse"]))
+    sys.exit()
 
 # Exception catching
 except ValueError as err:
@@ -237,7 +238,12 @@ except AttributeError as err:
     print(f'\nIf you see this, it may be an issue with your startup_config file. Please delete it and try again... \n\nConfig Location: {cfg_dir}')
     sys.exit()
 
+
+except SystemExit as err:
+    sys.exit()
+
 except Exception as err:
     print(f'\ntype: {sys.exc_info()} \nerror:{err}')
     print(f'args: {err.args}')
+    input(colored('Press any key to exit...', 'cyan' , attrs=["reverse"]))
     sys.exit()
